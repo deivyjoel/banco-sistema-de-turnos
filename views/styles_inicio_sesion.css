@@ -1,0 +1,106 @@
+body {
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #F8F7FF;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: 1.5rem;
+}
+
+.titulo-banco {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #26215C;
+    margin: 0;
+    position: absolute;  
+    top: 2.5rem;           
+}
+
+.card {
+    background: #FFFFFF;
+    padding: 2rem;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 340px;
+    border: 1px solid #AFA9EC;
+    box-sizing: border-box;
+}
+
+.card h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: #26215C;
+    margin: 0 0 1.5rem 0;
+    text-align: center;
+}
+
+.campo {
+    margin-bottom: 1.1rem;
+}
+
+.campo label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #3C3489;
+    margin-bottom: 5px;
+}
+
+.campo input {
+    display: block;
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #AFA9EC;
+    border-radius: 7px;
+    font-size: 14px;
+    color: #26215C;
+    background: #EEEDFE;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.campo input:focus {
+    border-color: #534AB7;
+    background: #fff;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 10px;
+    background: #534AB7;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 0.4rem;
+}
+
+.btn-primary:hover {
+    background: #3C3489;
+}
+
+.link-cambio {
+    margin-top: 1rem;
+    font-size: 13px;
+    color: #534AB7;
+    text-align: center;
+}
+
+.link-cambio a {
+    color: #534AB7;
+    font-weight: 500;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.oculto {
+    display: none;
+}

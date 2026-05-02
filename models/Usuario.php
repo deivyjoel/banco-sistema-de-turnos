@@ -3,39 +3,54 @@
 class Usuario extends Conectar{
 
     public function register($nombre, $email, $password){
-        $conectar = parent::Conexion();
-        $sql = "
-        INSERT INTO b_usuario(usu_nom, usu_email, usu_rol)
-        VALUES (?, ?, ?, 'usuario')
-        ";
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindValue(1, $nombre);
-        $stmt->bindValue(2, $email);
-        $stmt->bindValue(3, password_hash($password, PASSWORD_BCRYPT));
-        $stmt->execute();
+        try{
+            $conectar = parent::Conexion();
+            $sql = "
+                INSERT INTO b_usuario(usu_nom, usu_email, usu_password, usu_rol)
+                VALUES (?, ?, ?, 'usuario')
+            ";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindValue(1, $nombre);
+            $stmt->bindValue(2, $email);
+            $stmt->bindValue(3, password_hash($password, PASSWORD_BCRYPT));
+            $stmt->execute();
 
-        return ["success" => true];
+            return ["success" => true];
+        } catch(Exception $e){
+            return [
+                "success" => false,
+                "error" => $e->getMessage()
+            ];
+        }
     }
 
     public function login($email, $password){
-        $conectar = parent::Conexion();
+        try{
+            $conectar = parent::Conexion();
 
-        $sql = "SELECT * FROM usuarios WHERE usu_email = ?";
-        $stmt = $conectar->prepare($sql);
-        $stmt->bindValue(1, $email);
-        $stmt->execute();
+            $sql = "SELECT * FROM b_usuario WHERE usu_email = ?";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindValue(1, $email);
+            $stmt->execute();
 
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user && password_verify($password, $user["usu_password"])) {
+            if ($user && password_verify($password, $user["usu_password"])) {
+                return [
+                    "success" => true,
+                    "user" => $user
+                ];
+            }
+
+            return ["success" => false];
+        } catch(Exception $e){
             return [
-                "success" => true,
-                "user" => $user
+                "success" => false,
+                "error" => $e->getMessage()
             ];
         }
-
-        return ["success" => false];
     }
+
     public function get_usuario(){
         try{
             $conectar = parent::Conexion();
@@ -48,7 +63,6 @@ class Usuario extends Conectar{
                 "success" => true,
                 "object" => $stmt->fetchAll(PDO::FETCH_ASSOC)
             ];
-
         } catch(Exception $e){
             return [
                 "success" => false,
@@ -69,7 +83,6 @@ class Usuario extends Conectar{
             $stmt->execute();
 
             return ["success" => true];
-
         } catch(Exception $e){
             return [
                 "success" => false,
@@ -91,7 +104,6 @@ class Usuario extends Conectar{
             $stmt->execute();
 
             return ["success" => true];
-
         } catch(Exception $e){
             return [
                 "success" => false,

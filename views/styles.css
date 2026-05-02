@@ -1,7 +1,7 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f5f6f8;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #F8F7FF;
 }
 
 /* Contenedor principal */
@@ -14,12 +14,13 @@ body {
 /* Navbar */
 .navbar {
     height: 60px;
-    background-color: #cfe3ea;
+    background-color: #534AB7;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
-    font-weight: bold;
+    font-weight: 500;
+    color: #ffffff;
 }
 
 /* Contenedor inferior */
@@ -29,32 +30,52 @@ body {
     position: relative;
 }
 
-
 /* Sidebar */
 .sidebar {
     width: 250px;
     height: 100%;
-    background-color: #d9eef5;
+    background-color: #EEEDFE;
+    border-right: 1px solid #AFA9EC;
     position: absolute;
     transform: translateX(-250px);
     display: flex;
     flex-direction: column;
+    padding: 1.5rem 1rem;
+    box-sizing: border-box;
 }
 
-.sidebar.open{
-    transform: translateX(0)
+.sidebar.open {
+    transform: translateX(0);
 }
 
-@media (min-width: 768px){
-    .sidebar{
+@media (min-width: 768px) {
+    .sidebar {
         position: relative;
         transform: none;
     }
 }
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #26215C;
+    margin: 0 0 1.5rem 0;
+}
+
 .sidebar a {
     text-decoration: none;
-    margin: 10px 0;
-    color: #333;
+    margin: 6px 0;
+    color: #3C3489;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 10px;
+    border-radius: 7px;
+    transition: background 0.2s;
+}
+
+.sidebar a:hover {
+    background-color: #AFA9EC;
+    color: #26215C;
 }
 
 /* Contenido */
@@ -67,43 +88,53 @@ body {
 
 /* Cards */
 .card {
-    background-color: #e9e9e9;
+    background-color: #FFFFFF;
     padding: 15px;
     margin-bottom: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 14px;
+    border: 1px solid #AFA9EC;
+    box-shadow: 0 2px 4px rgba(83, 74, 183, 0.08);
     cursor: pointer;
 }
 
 /* Botón */
 .btn {
-    margin-top: auto; /* empuja el botón abajo */
+    margin-top: auto;
     align-self: center;
-    padding: 12px 20px;
-    background-color: #2b7a8b;
-    color: white;
+    padding: 10px 20px;
+    background-color: #534AB7;
+    color: #ffffff;
     border: none;
-    border-radius: 8px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
 }
 
-.turnos{
+.btn:hover {
+    background-color: #3C3489;
+}
+
+.turnos {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
 
-/*card-servicio*/
+/* card-servicio */
 .card-servicio {
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.2s;
+    border: 1px solid #AFA9EC;
+    background-color: #FFFFFF;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #26215C;
 }
 
 .card-servicio:hover {
-  transform: scale(1.03);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(83, 74, 183, 0.15);
 }

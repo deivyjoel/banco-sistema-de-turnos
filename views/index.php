@@ -1,9 +1,17 @@
+<?php
+session_start();
+
+if(empty($_SESSION['usuario'])){
+    header('Location: inicio_sesion.html');
+    exit;
+}
 <!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="utf-8">
         <title>Banca Unión</title>
         <link rel="stylesheet" href="styles.css">
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     </head>
     <body>
         <div class="app">
