@@ -4,9 +4,7 @@ function mostrar(cual) {
     document.getElementById('card-' + cual).classList.remove('oculto');
 }
 
-// ======================
 // LOGIN
-// ======================
 document.getElementById("form-login").addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -47,10 +45,15 @@ document.getElementById("form-login").addEventListener("submit", async function 
             alert(data.message || "Error en el servidor");
             return; 
         }
+        
 
         if (data.status === "success") {
-            alert("Bienvenido");
-            window.location.href = "/banco_sistema_atc/views/index.php";
+            console.log(data)
+            if (data.rol === "admin") {
+                window.location.href = "/banco_sistema_atc/views/admin/index.php";
+            } else {
+                window.location.href = "/banco_sistema_atc/views/usuario/index.php";
+            }
         } else {
             alert(data.message);
         }
@@ -62,9 +65,7 @@ document.getElementById("form-login").addEventListener("submit", async function 
 });
 
 
-// ======================
 // REGISTRO
-// ======================
 document.getElementById("form-registro").addEventListener("submit", async function (e) {
     e.preventDefault();
 

@@ -16,6 +16,8 @@ try {
         $method === 'POST' && $uri === '/auth/login'    => fn() => (new AuthController)->login(),
         $method === 'GET'  && $uri === '/usuarios'      => fn() => (new UsuarioController)->index(),
         $method === 'POST' && $uri === '/usuarios'      => fn() => (new UsuarioController)->store(),
+        $method === 'POST' && $uri === '/auth/logout' => fn() => (new AuthController)->deslog(),
+        $method === 'POST' && $uri === '/get_servicios' => fn() => ()
         default => function() {
             http_response_code(404);
             echo json_encode(["error" => "Ruta no encontrada"]);

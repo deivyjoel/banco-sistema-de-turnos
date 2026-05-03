@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(empty($_SESSION['usuario'])){
-    header('Location: inicio_sesion.html');
+    header('Location: login/inicio_sesion.html');
     exit;
 }
 ?>
@@ -10,21 +10,20 @@ if(empty($_SESSION['usuario'])){
     <head>
         <meta charset="utf-8">
         <title>Banca Unión</title>
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="../style_index.css">
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     </head>
     <body>
         <div class="app">
             <nav class="navbar">
-                <p>Hola, User...</p>
+                <p>Hola, <?= htmlspecialchars($_SESSION['usuario']['nombre']) ?>!</p>
                 <p>Banca Unión</p>
             </nav>
             <div class="main">
                 <aside class="sidebar">
                     <h2>Banca Unión</h2>
-                    <a href="index.php?vista=inicio">Inicio</a>
-                    <a href="index.php?vista=perfil">Mi perfil</a>
-                    <a href="index.php?accion=cerrar_sesion">Cerrar sesión</a>
+                    <a href="#" id="btn-inicio">Inicio</a>
+                    <a href="#" id="btn-logout">Cerrar sesión</a>
                 </aside>
 
                 <section class="content">

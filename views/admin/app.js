@@ -1,4 +1,3 @@
-console.log("alo we?")
 function CargarVista(ruta){
     fetch(ruta)
     .then(res => res.text())
@@ -13,12 +12,35 @@ function CargarVista(ruta){
     })
 }
 
+// Que lo primero que se recargue sea inicio
 document.addEventListener("DOMContentLoaded", () =>{
-    CargarVista("inicio.html")
+    CargarVista("../inicio.html")
+})
+
+// Boton de inicio
+document.getElementById("btn-inicio").addEventListener("click", async function(e){
+  e.preventDefault;
+  CargarVista("../inicio.html")
 })
 
 
+// Boton de desloguearse
+document.getElementById("btn-logout").addEventListener("click", async function(e){
+    e.preventDefault();
+    const response = await fetch("/banco_sistema_atc/auth/logout", {
+        method: "POST"
+    });
 
+    const data = await response.json();
+
+    if (data.status === "success"){
+        window.location.href = "/banco_sistema_atc/views/login/inicio_sesion.html";
+    }
+});
+
+
+
+// Falta arreglar we
 function cargarServicios() {
   fetch("../controller/servicio.php?op=listar")
     .then(res => res.json())

@@ -79,6 +79,11 @@ class AuthController{
             'rol'    => $result['user']['usu_rol']
         ];
 
-        echo json_encode(["status" => "success", "message" => "Bienvenido"]);
+        echo json_encode(["status" => "success", "message" => "Bienvenido", "rol" => $result['user']['usu_rol']]);
+    }
+
+    public function deslog() {
+        session_destroy();
+        echo json_encode(["status" => "success", "message" => "Sesión cerrada"]);
     }
 }
