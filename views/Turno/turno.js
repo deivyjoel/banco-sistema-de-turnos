@@ -1,0 +1,40 @@
+$(document).ready(function() {
+    $('#turno_data').DataTable({
+        responsive: true,
+        "aProcessing": true,
+        "aServerSide": true,
+        "ajax": {
+            url: "../../controller/turnoController.php?op=listar_usuario",
+            type: "post",
+            dataType: "json",
+            error: function(e) {
+                console.log("Error al cargar datos: ", e.responseText);
+            }
+        },
+        "bDestroy": true,
+        "bInfo": true,
+        "iDisplayLength": 10,
+        "order": [[2, "desc"]],
+        "language": {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sSearch": "Buscar:",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
+    });
+});
