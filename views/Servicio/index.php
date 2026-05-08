@@ -1,4 +1,5 @@
 <?php require_once("../Main/sesion.php"); ?>
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -7,13 +8,13 @@
 </head>
 <body data-topbar="colored">
     <div id="layout-wrapper">
-
+        // HEADER
         <?php require_once("../Main/mainheader.php"); ?>
+        // SIDEBAR
         <?php require_once("../Main/mainleftsiderbar.php"); ?>
-
+        // MAIN CONTENT 
         <div class="main-content">
             <div class="page-content">
-
                 <!-- Page-Title -->
                 <div class="page-title-box">
                     <div class="container-fluid">
@@ -29,12 +30,18 @@
                 </div>
                 <!-- end page title -->
 
+                <!-- start page-content hwere -->
                 <div class="page-content-wrapper">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
+                                        <?php if ($usu_rol === 1){ ?>
+                                            <button class="btn btn-secondary waves-effect waves-light mb-4" id="btnnuevo">
+                                                <i class="fa fa-plus-square me-2"></i> Nuevo Servicio
+                                            </button>
+                                        <?php } ?>
 
                                         <!-- Tabla DataTable -->
                                         <table id="servicio_data" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
@@ -42,9 +49,13 @@
                                                 <tr>
                                                     <th>Nombre</th>
                                                     <th>Duración Promedio</th>
-                                                    <th>Estado</th>
-                                                    <th><?php echo $usu_rol == 1 ? 'Detalle' : 'Reservar'; ?></th>
-                                                </tr>
+                                                    <?php if ($usu_rol === 1) { ?>
+                                                            <th></th>
+                                                            <th></th>
+                                                    <?php } ?>
+                                                    <?php if ($usu_rol === 2){ ?>
+                                                            <th>Reservar</th>
+                                                    <?php } ?>
                                             </thead>
                                             <tbody>
                                                 <!-- Cargado dinámicamente desde servicio.js -->
@@ -58,38 +69,16 @@
                     </div>
                 </div>
                 <!-- end page-content-wrapper -->
-
             </div>
 
-            <?php require_once("../Main/mainfooter.php"); ?>
+            
         </div>
+        //FOOTER
+        <?php require_once("../Main/mainfooter.php"); ?>
     </div>
 
-    <!-- Right Sidebar -->
-    <div class="right-bar">
-        <div data-simplebar class="h-100">
-            <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#chat-tab" role="tab">
-                        <span class="d-none d-sm-block"><i class="mdi mdi-message-text font-size-22"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#tasks-tab" role="tab">
-                        <span class="d-none d-sm-block"><i class="mdi mdi-format-list-checkbox font-size-22"></i></span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#settings-tab" role="tab">
-                        <span class="d-none d-sm-block"><i class="mdi mdi-settings font-size-22"></i></span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="rightbar-overlay"></div>
-
-
+    <!-- SCRIPTS -->
+    <?php require_once("modalMantenimiento.php"); ?>
     <?php require_once("../Main/mainjs.php"); ?>
     <script src="./servicio.js"></script>
 </body>

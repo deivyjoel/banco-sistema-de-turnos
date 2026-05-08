@@ -91,7 +91,7 @@
 <div class="login-wrapper">
     <div class="login-card">
 
-        <img src="../../assets/LOGO_BANCA_UNION.png" height="90" class="logo">
+        <img src="../../public/images/LOGO_BANCA_UNION.png" height="90" class="logo">
 
         <h4>Iniciar Sesión</h4>
 

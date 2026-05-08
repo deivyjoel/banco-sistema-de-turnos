@@ -6,20 +6,20 @@
                     <li class="menu-title">Menu</li>
                     <li>
                         <a href="../../views/inicio/" class="waves-effect">
-                            <div class="d-inline-block icons-sm me-1"><i class="uim uim-airplay"></i></div>
+                            <div class="d-inline-block icons-sm me-1"><i class="mdi mdi-home"></i></div>
                             <span>Inicio</span>
                         </a>
                     </li>
                     <li>
-                        <a href="../../views/Usuario/" class="waves-effect">
-                            <div class="d-inline-block icons-sm me-1"><i class="uim uim-comment-message"></i></div>
-                            <span>Usuarios</span>
+                        <a href="../../views/Turno/" class="waves-effect">
+                            <div class="d-inline-block icons-sm me-1"><i class="mdi mdi-history"></i></div>
+                            <span>Historial de Turnos</span>
                         </a>
                     </li>
                     <li>
-                        <a href="../../views/Turno/" class="waves-effect">
-                            <div class="d-inline-block icons-sm me-1"><i class="uim uim-clock"></i></div>
-                            <span>Historial de Turnos</span>
+                        <a href="../../views/Servicio" class="wave-effect">
+                            <div class="d-inline-block icons-sm me-1"><i class="mdi mdi-briefcase-outline"></i></div>
+                            <span>Servicios</span>
                         </a>
                     </li>
                 </ul>

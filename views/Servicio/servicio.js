@@ -1,3 +1,9 @@
+function init() {
+    $("#servicio_form").on("submit", function(e) {
+        guardaryeditar(e);
+    });
+}
+
 $(document).ready(function() {
     $('#servicio_data').DataTable({
         responsive: true,
@@ -100,3 +106,104 @@ function reservar(ser_id) {
         }
     });
 }
+
+
+
+function guardaryeditar(e) {
+    e.preventDefault();
+
+    var formData = new FormData($("#servicio_form")[0]);
+
+    $.ajax({
+        url: "../../controller/servicioController.php?op=guardaryeditar",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            try {
+                response = JSON.parse(response);
+
+                if (response.success) {
+                    Swal.fire('Éxito', response.message, 'success');
+                    $("#servicio_form")[0].reset();
+                    $("#modalmantenimiento").modal('hide');
+                    $("#servicio_data").DataTable().ajax.reload();
+                    $("#btnagregar").show();
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            } catch (e) {
+                Swal.fire('Error', 'Respuesta inesperada del servidor.', 'error');
+                console.log("Error al parsear JSON: ", response);
+            }
+        },
+        error: function() {
+            Swal.fire('Error', 'Hubo un problema de conexión con el servidor.', 'error');
+        }
+    });
+}
+
+
+function editar(ser_id) {
+    $.post("../../controller/servicioController.php?op=mostrar", { ser_id: ser_id }, function(data) {
+        try {
+            data = JSON.parse(data);
+            $("#id_servicio").val(data.ser_id);
+            $("#view_ser_nom").val(data.ser_nom);
+            $('#view_ser_dur_prom').val(data.ser_dur_prom);
+            
+        } catch (e) {
+            Swal.fire('Error', 'No se pudo cargar la información del ítem.', 'error');
+        }
+    });
+
+    $("#modalmantenimiento").modal('show');
+}
+
+
+// Eliminar ítem (desactivar)
+function eliminar(ser_id) {
+    Swal.fire({
+        title: "¿Eliminar servicio?",
+        text: "Esta acción desactivará el servicio.",
+        icon: "warning",
+        confirmButtonText: "Sí, eliminar",
+        showCancelButton: true,
+        cancelButtonText: "Cancelar",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post("../../controller/servicioController.php?op=eliminar", { ser_id: ser_id }, function(data) {
+                try {
+                    data = JSON.parse(data);
+                    if (data.success) {
+                        $('#servicio_data').DataTable().ajax.reload();
+                        Swal.fire('Eliminado', data.message, 'success');
+                    } else {
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                } catch (e) {
+                    Swal.fire('Error', 'Error al procesar la respuesta.', 'error');
+                }
+            }).fail(function() {
+                Swal.fire('Error', 'Error de conexión al servidor.', 'error');
+            });
+        }
+    });
+}
+
+// Botón "Nuevo servicio"
+$(document).on("click", "#btnnuevo", function() {
+    $("#lbltitulo").html('Nuevo servicio');
+    $('#servicio_form')[0].reset();
+    $('#id_servicio').val('');
+    $('#view_ser_nom').val('');
+    $('#view_ser_dur_prom').val('');
+    $("#modalmantenimiento").modal('show');
+    $("#btnagregar").show();
+});
+
+init();
+
+//TOD0 NATIVO

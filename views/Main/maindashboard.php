@@ -39,7 +39,7 @@ $t           = $tieneTurno ? $turnoActivo['object'] : null;
                                 </p>
                                 <p class="mb-0">
                                     <strong>Estado:</strong>
-                                    <?php if ($t['tur_est'] == 'pendiente'): ?>
+                                    <?php if ($t['tur_est'] == 1): ?>
                                         <span class="badge" style="background-color:#EEEDFE; color:#3C3489; font-size:0.85em;">EN ESPERA</span>
                                     <?php else: ?>
                                         <span class="badge" style="background-color:#534AB7; color:#fff; font-size:0.85em;">EN ATENCIÓN</span>
@@ -47,7 +47,7 @@ $t           = $tieneTurno ? $turnoActivo['object'] : null;
                                 </p>
                             </div>
 
-                            <?php if ($t['tur_est'] == 'pendiente'): ?>
+                            <?php if ($t['tur_est'] == 1): ?>
                                 <a href="../../controller/turnoController.php?op=cancelar_directo&tur_id=<?php echo $t['tur_id']; ?>" 
                                 class="btn mt-4 w-100" style="border: 1px solid #534AB7; color: #534AB7; background-color: transparent; border-radius: 4px;">
                                     <i class="mdi mdi-close me-1"></i> Cancelar turno

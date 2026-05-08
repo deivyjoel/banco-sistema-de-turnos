@@ -7,100 +7,101 @@ $turno = new Turno();
 
 switch ($_GET["op"]) {
 
-    case 'listar':
-        // Admin: historial completo de todos los turnos
-        $datos = $turno->get_all();
-        $data = array();
-        foreach ($datos as $row) {
-            $sub_array = array();
-            $sub_array[] = $row["tur_n_tur"];
-            $sub_array[] = $row["tur_pre"];
-            $sub_array[] = $row["ser_nom"];
-            $sub_array[] = $row["usu_nom"]; // nombre del usuario
-            $sub_array[] = $row["tur_fec_reg"];
-
-            switch ($row["tur_est"]) {
-                case 'espera':
-                    $sub_array[] = '<span class="badge" style="font-size:1em; background-color:#f0ad4e;">EN ESPERA</span>';
-                    break;
-                case 'atendiendo':
-                    $sub_array[] = '<span class="badge" style="font-size:1em; background-color:#0275d8;">ATENDIENDO</span>';
-                    break;
-                case 'atendido':
-                    $sub_array[] = '<span class="badge" style="font-size:1em; background-color:green;">ATENDIDO</span>';
-                    break;
-                case 'cancelado':
-                    $sub_array[] = '<span class="badge" style="font-size:1em; background-color:red;">CANCELADO</span>';
-                    break;
-                default:
-                    $sub_array[] = '<span class="badge" style="font-size:1em; background-color:gray;">' . strtoupper($row["tur_est"]) . '</span>';
-            }
-
-            $data[] = $sub_array;
-        }
-
-        echo json_encode([
-            "sEcho"                => 1,
-            "iTotalRecords"        => count($data),
-            "iTotalDisplayRecords" => count($data),
-            "aaData"               => $data
-        ]);
-        break;
-
-
     case 'listar_usuario':
         if (empty($_SESSION['usuario'])) {
             echo json_encode(["sEcho" => 1, "iTotalRecords" => 0, "iTotalDisplayRecords" => 0, "aaData" => []]);
             break;
         }
 
-        $usu_id = $_SESSION['usuario']['id'];
-        $datos = $turno->get_turnos_by_usuario($usu_id);
-        $data = array();
+        $usu_rol = $_SESSION['usuario']['rol'];
+        if ($usu_rol === 1){
+            $datos = $turno->get_all();
+            $data = array();
+            foreach ($datos as $row) {
+                $sub_array = array();
+                $sub_array[] = $row["tur_pre"] . $row["tur_n_tur"];
+                $sub_array[] = $row["ser_nom"]; 
+                $sub_array[] = $row["tur_fec_hor"];
+                $sub_array[] = $row["usu_nom"];
 
-        foreach ($datos as $row) {
-            $sub_array = array();
-            $sub_array[] = $row["tur_pre"] . $row["tur_n_tur"];
-            $sub_array[] = $row["ser_nom"];
-            $sub_array[] = $row["tur_fec_hor"];
+                switch ($row["tur_est"]) {
+                    case 1:
+                        $sub_array[] = '<span class="badge" style="font-size:1em; background-color:#f0ad4e; cursor:pointer;" 
+                            onclick="cambiarEstado(' . $row["tur_id"] . ', 2, \'' . $row["tur_pre"] . $row["tur_n_tur"] . '\')">EN ESPERA</span>';
+                        break;
+                    case 2:
+                        $sub_array[] = '<span class="badge" style="font-size:1em; background-color:#0275d8; cursor:pointer;" 
+                            onclick="cambiarEstado(' . $row["tur_id"] . ', 4, \'' . $row["tur_pre"] . $row["tur_n_tur"] . '\')">ATENDIENDO</span>';
+                        break;
+                    case 4:
+                        $sub_array[] = '<span class="badge" style="font-size:1em; background-color:green;">ATENDIDO</span>';
+                        break;
+                    case 3:
+                        $sub_array[] = '<span class="badge" style="font-size:1em; background-color:red;">CANCELADO</span>';
+                        break;
+                    default:
+                        $sub_array[] = '<span class="badge" style="font-size:1em; background-color:gray;">' . $row["tur_est"] . '</span>';
+                        break;
+                }
 
-            switch ($row["tur_est"]) {
-                case 'espera':
-                    $sub_array[] = '<span class="badge" style="font-size:0.85em; background-color:#CECBF6; color:#3C3489;">EN ESPERA</span>';
-                    break;
-                case 'atendiendo':
-                    $sub_array[] = '<span class="badge" style="font-size:0.85em; background-color:#534AB7; color:#FFFFFF;">EN ATENCIÓN</span>';
-                    break;
-                case 'atendido':
-                    $sub_array[] = '<span class="badge" style="font-size:0.85em; background-color:#1DB97A; color:#FFFFFF;">ATENDIDO</span>';
-                    break;
-                case 'cancelado':
-                    $sub_array[] = '<span class="badge" style="font-size:0.85em; background-color:#E24B4A; color:#FFFFFF;">CANCELADO</span>';
-                    break;
-                default:
-                    $sub_array[] = '<span class="badge" style="font-size:0.85em; background-color:#CECBF6; color:#3C3489;">' . strtoupper($row["tur_est"]) . '</span>';
+                $data[] = $sub_array;
             }
 
-            // Botón cancelar solo si está en espera
-            if ($row["tur_est"] == 'espera') {
-                $sub_array[] = '<button type="button" onClick="cancelar(' . $row["tur_id"] . ');" class="btn btn-outline-danger btn-icon"><div><i class="mdi mdi-trash-can"></i></div></button>';
-            } else {
-                $sub_array[] = '-';
+            echo json_encode([
+                "sEcho"                => 1,
+                "iTotalRecords"        => count($data),
+                "iTotalDisplayRecords" => count($data),
+                "aaData"               => $data
+            ]);
+            break;            
+        } else{
+            $usu_id = $_SESSION['usuario']['id'];
+            $datos = $turno->get_turnos_by_usuario($usu_id);
+            $data = array();
+
+            foreach ($datos as $row) {
+                $sub_array = array();
+                $sub_array[] = $row["tur_pre"] . $row["tur_n_tur"];
+                $sub_array[] = $row["ser_nom"];
+                $sub_array[] = $row["tur_fec_hor"];
+
+                switch ($row["tur_est"]) {
+                    case 1:
+                        $sub_array[] = '<span class="badge" style="font-size:0.85em; background-color:#CECBF6; color:#3C3489;">EN ESPERA</span>';
+                        break;
+                    case 2:
+                        $sub_array[] = '<span class="badge" style="font-size:0.85em; background-color:#534AB7; color:#FFFFFF;">EN ATENCIÓN</span>';
+                        break;
+                    case 4:
+                        $sub_array[] = '<span class="badge" style="font-size:0.85em; background-color:#1DB97A; color:#FFFFFF;">ATENDIDO</span>';
+                        break;
+                    case 3:
+                        $sub_array[] = '<span class="badge" style="font-size:0.85em; background-color:#E24B4A; color:#FFFFFF;">CANCELADO</span>';
+                        break;
+                    default:
+                        $sub_array[] = '<span class="badge" style="font-size:0.85em; background-color:#CECBF6; color:#3C3489;">' . $row["tur_est"] . '</span>';
+                }
+
+                // Botón cancelar solo si está en espera
+                if ($row["tur_est"] == 1) {
+                    $sub_array[] = '<button type="button" onClick="cancelar(' . $row["tur_id"] . ');" class="btn btn-outline-danger btn-icon"><div><i class="mdi mdi-trash-can"></i></div></button>';
+                } else {
+                    $sub_array[] = '-';
+                }
+
+                $data[] = $sub_array;
             }
 
-            $data[] = $sub_array;
+            echo json_encode([
+                "sEcho"                => 1,
+                "iTotalRecords"        => count($data),
+                "iTotalDisplayRecords" => count($data),
+                "aaData"               => $data
+            ]);
+            break;
         }
 
-        echo json_encode([
-            "sEcho"                => 1,
-            "iTotalRecords"        => count($data),
-            "iTotalDisplayRecords" => count($data),
-            "aaData"               => $data
-        ]);
-        break;
-
     case 'turno_activo':
-        // Turno activo del usuario logueado
         if (empty($_SESSION['usuario'])) {
             echo json_encode(["success" => false, "message" => "No autenticado"]);
             break;
@@ -189,45 +190,6 @@ switch ($_GET["op"]) {
         echo json_encode($response);
         break;
 
-    case 'historial_usuario':
-        if (empty($_SESSION['usuario'])) {
-            echo json_encode(["sEcho" => 1, "iTotalRecords" => 0, "iTotalDisplayRecords" => 0, "aaData" => []]);
-            break;
-        }
-
-        $usu_id = $_SESSION['usuario']['id'];
-        $datos  = $turno->get_turnos_by_usuario($usu_id);
-        $data   = array();
-
-        foreach ($datos as $row) {
-            // Solo mostrar atendido y cancelado
-            if (!in_array($row["tur_est"], ['atendido', 'cancelado'])) continue;
-
-            $sub_array   = array();
-            $sub_array[] = $row["tur_pre"] . str_pad($row["tur_n_tur"], 3, '0', STR_PAD_LEFT);
-            $sub_array[] = $row["ser_nom"];
-            $sub_array[] = $row["tur_fec_reg"];
-
-            switch ($row["tur_est"]) {
-                case 'atendido':
-                    $sub_array[] = '<span class="badge" style="font-size:1em; background-color:green;">ATENDIDO</span>';
-                    break;
-                case 'cancelado':
-                    $sub_array[] = '<span class="badge" style="font-size:1em; background-color:red;">CANCELADO</span>';
-                    break;
-            }
-
-            $data[] = $sub_array;
-        }
-
-        echo json_encode([
-            "sEcho"                => 1,
-            "iTotalRecords"        => count($data),
-            "iTotalDisplayRecords" => count($data),
-            "aaData"               => $data
-        ]);
-        break;
-
     case 'cancelar_directo':
         if (empty($_SESSION['usuario'])) {
             header("Location: ../../views/Login/index.php");
@@ -240,6 +202,37 @@ switch ($_GET["op"]) {
 
         header("Location: ../views/Inicio/index.php");
         exit();
+        break;
+
+    case 'mostrar':
+        $tur_id = $_POST['tur_id'];
+        $dato = $turno->get_turno_x_id($tur_id);
+        echo json_encode($dato);
+        break;
+
+    case 'cambiar_estado':
+        $tur_id     = (int) $_POST['tur_id'];
+        $ser_id = (int) $_POST['ser_id'];
+        $estado = (int) $_POST['estado'];
+
+        // Validar que el estado sea válido
+        $permitidos = [2, 3, 4];
+        if (!in_array($estado, $permitidos)) {
+            echo json_encode(["success" => false, "mensaje" => "Estado no válido"]);
+            break;
+        }
+
+        // Regla: no dos 'atendiendo' al mismo tiempo por servicio
+        if ($estado === 2) {
+            $hayAtendiendo = $turno->servicio_tiene_turno_activo($ser_id);
+            if ($hayAtendiendo) {
+                echo json_encode(["success" => false, "mensaje" => "Ya hay un turno en atención para este servicio"]);
+                break;
+            }
+        }
+
+        $ok = $turno->cambiar_estado($tur_id, $estado);
+        echo json_encode(["success" => $ok]);
         break;
 
     default:

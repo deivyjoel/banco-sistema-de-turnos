@@ -19,28 +19,6 @@ class Turno extends Conectar {
         }
     }
 
-    public function get_turno_activo($usu_id) {
-        try {
-            $conectar = parent::Conexion();
-            $sql = "SELECT t.*, s.ser_nom, s.ser_dur_prom
-                    FROM b_turno t
-                    INNER JOIN b_servicio s ON t.tur_ser_id = s.ser_id
-                    WHERE t.tur_usu_id = ?
-                    AND t.tur_est IN ('pendiente', 'en_atencion')
-                    LIMIT 1";
-            $stmt = $conectar->prepare($sql);
-            $stmt->bindValue(1, $usu_id);
-            $stmt->execute();
-            return [
-                "success" => true,
-                "object"  => $stmt->fetch(PDO::FETCH_ASSOC) ?: null
-            ];
-        } catch (Throwable $e) {
-            error_log("ERROR en get_turno_activo: " . $e->getMessage());
-            return ["success" => false, "object" => null, "error" => "Error al obtener turno activo"];
-        }
-    }
-
     public function get_turnos_by_usuario($usu_id) {
         try {
             $conectar = parent::Conexion();
@@ -59,10 +37,50 @@ class Turno extends Conectar {
         }
     }
 
+    public function get_turno_activo($usu_id) {
+        try {
+            $conectar = parent::Conexion();
+            $sql = "SELECT t.*, s.ser_nom, s.ser_dur_prom
+                    FROM b_turno t
+                    INNER JOIN b_servicio s ON t.tur_ser_id = s.ser_id
+                    WHERE t.tur_usu_id = ?
+                    AND t.tur_est IN (1, 2)
+                    LIMIT 1";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindValue(1, $usu_id);
+            $stmt->execute();
+            return [
+                "success" => true,
+                "object"  => $stmt->fetch(PDO::FETCH_ASSOC) ?: null
+            ];
+        } catch (Throwable $e) {
+            error_log("ERROR en get_turno_activo: " . $e->getMessage());
+            return ["success" => false, "object" => null, "error" => "Error al obtener turno activo"];
+        }
+    }
+
+    public function get_turno_x_id($tur_id) {
+        try {
+            $conectar = parent::Conexion();
+            $sql = "SELECT t.*, s.ser_nom, u.usu_nom
+                    FROM b_turno t
+                    INNER JOIN b_servicio s ON t.tur_ser_id = s.ser_id
+                    INNER JOIN b_usuario u  ON t.tur_usu_id = u.usu_id
+                    WHERE t.tur_id = ?";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindValue(1, $tur_id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Throwable $e) {
+            error_log("ERROR en get_by_id: " . $e->getMessage());
+            return null;
+        }
+    }
+
     public function usuario_tiene_turno_activo($usu_id) {
         try {
             $conectar = parent::Conexion();
-            $sql  = "SELECT tur_id FROM b_turno WHERE tur_usu_id = ? AND tur_est IN ('pendiente', 'en_atencion') LIMIT 1";
+            $sql  = "SELECT tur_id FROM b_turno WHERE tur_usu_id = ? AND tur_est IN (1, 2) LIMIT 1";
             $stmt = $conectar->prepare($sql);
             $stmt->bindValue(1, $usu_id);
             $stmt->execute();
@@ -76,7 +94,7 @@ class Turno extends Conectar {
     public function usuario_tiene_turno_en_servicio($usu_id, $ser_id) {
         try {
             $conectar = parent::Conexion();
-            $sql  = "SELECT tur_id FROM b_turno WHERE tur_usu_id = ? AND tur_ser_id = ? AND tur_est IN ('pendiente', 'en_atencion') LIMIT 1";
+            $sql  = "SELECT tur_id FROM b_turno WHERE tur_usu_id = ? AND tur_ser_id = ? AND tur_est IN (1, 2) LIMIT 1";
             $stmt = $conectar->prepare($sql);
             $stmt->bindValue(1, $usu_id);
             $stmt->bindValue(2, $ser_id);
@@ -110,7 +128,7 @@ class Turno extends Conectar {
 
             $n_turno = $prefijo . str_pad($siguiente, 3, '0', STR_PAD_LEFT);
 
-            $stmt = $conectar->prepare("INSERT INTO b_turno (tur_usu_id, tur_ser_id, tur_n_tur, tur_pre, tur_est) VALUES (?, ?, ?, ?, 'pendiente')");
+            $stmt = $conectar->prepare("INSERT INTO b_turno (tur_usu_id, tur_ser_id, tur_n_tur, tur_pre, tur_est) VALUES (?, ?, ?, ?, 1)");
             $stmt->bindValue(1, $usu_id);
             $stmt->bindValue(2, $ser_id);
             $stmt->bindValue(3, $siguiente);
@@ -126,25 +144,41 @@ class Turno extends Conectar {
         }
     }
 
-
-
-    public function cancelar_turno($tur_id, $usu_id) {
+    public function servicio_tiene_turno_activo($ser_id) {
         try {
             $conectar = parent::Conexion();
-            $sql  = "UPDATE b_turno SET tur_est = 'cancelado' WHERE tur_id = ? AND tur_usu_id = ? AND tur_est = 'pendiente'";
+            $sql = "SELECT tur_id FROM b_turno WHERE tur_ser_id = ? AND tur_est = 2 LIMIT 1";
             $stmt = $conectar->prepare($sql);
-            $stmt->bindValue(1, $tur_id);
-            $stmt->bindValue(2, $usu_id);
+            $stmt->bindValue(1, $ser_id);
+            $stmt->execute();
+            return $stmt->fetch() !== false;
+        } catch (Throwable $e) {
+            error_log("ERROR en servicio_tiene_turno_en_atencion: " . $e->getMessage());
+            return true;
+        }
+    }
+
+    //1: pendiente 2: en atencion 3: cancelado 4: atendido
+    public function cambiar_estado($tur_id, $tur_est) {
+        try {
+            $conectar = parent::Conexion();
+            $sql  = "UPDATE b_turno SET tur_est = ? WHERE tur_id = ?";
+            $stmt = $conectar->prepare($sql);
+            $stmt->bindValue(1, $tur_est);
+            $stmt->bindValue(2, $tur_id);
             $stmt->execute();
 
             if ($stmt->rowCount() === 0) {
-                return ["success" => false, "error" => "No se pudo cancelar el turno"];
+                error_log("alooooo aki hbubo error");
+                error_log("se en cambiar_estado: " . $tur_est . "para " . $tur_id);
+                return ["success" => false, "error" => "No se pudo cambiar el estado del turno"];
             }
-
+            error_log("se en cambiar_estado: " . $tur_est . "para " . $tur_id);
             return ["success" => true];
+            
         } catch (Throwable $e) {
-            error_log("ERROR en cancelar_turno: " . $e->getMessage());
-            return ["success" => false, "error" => "Error al cancelar turno"];
+            error_log("ERROR en cambiar_estado: " . $e->getMessage());
+            return ["success" => false, "error" => "Error al cambiar estado"];
         }
     }
 }

@@ -5,25 +5,12 @@ class Servicio extends Conectar {
     public function get_servicios() {
         try {
             $conectar = parent::Conexion();
-            $sql = "SELECT ser_id, ser_nom, ser_dur_prom, ser_est FROM b_servicio";
+            $sql = "SELECT ser_id, ser_nom, ser_dur_prom, ser_est FROM b_servicio WHERE ser_est=1";
             $stmt = $conectar->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Throwable $e) {
             error_log("ERROR en get_servicios: " . $e->getMessage());
-            return [];
-        }
-    }
-
-    public function get_servicios_activos() {
-        try {
-            $conectar = parent::Conexion();
-            $sql = "SELECT ser_id, ser_nom, ser_dur_prom FROM b_servicio WHERE ser_est = 1";
-            $stmt = $conectar->prepare($sql);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Throwable $e) {
-            error_log("ERROR en get_servicios_activos: " . $e->getMessage());
             return [];
         }
     }
@@ -71,15 +58,14 @@ class Servicio extends Conectar {
         }
     }
 
-    public function update_servicio($ser_id, $ser_nom, $ser_dur_prom, $ser_est) {
+    public function update_servicio($ser_id, $ser_nom, $ser_dur_prom) {
         try {
             $conectar = parent::Conexion();
-            $sql = "UPDATE b_servicio SET ser_nom = ?, ser_dur_prom = ?, ser_est = ? WHERE ser_id = ?";
+            $sql = "UPDATE b_servicio SET ser_nom = ?, ser_dur_prom = ? WHERE ser_id = ?";
             $stmt = $conectar->prepare($sql);
             $stmt->bindValue(1, $ser_nom);
             $stmt->bindValue(2, $ser_dur_prom);
-            $stmt->bindValue(3, $ser_est);
-            $stmt->bindValue(4, $ser_id);
+            $stmt->bindValue(3, $ser_id);
             $stmt->execute();
             return ["success" => true];
         } catch (Throwable $e) {

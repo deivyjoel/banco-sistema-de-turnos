@@ -9,15 +9,15 @@
                                     <img src=".asdasdads" alt="" height="30">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="../../assets/LOGO_BANCA_UNION.png" alt="" height="60">
+                                    <img src="../../public/images/LOGO_BANCA_UNION.png" alt="" height="60">
                                 </span>
                             </a>
                             <a href="#" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="../../assets/LOGO_BANCA_UNION.png" alt="" height="30">
+                                    <img src="../../public/images/LOGO_BANCA_UNION.png" alt="" height="30">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="../../assets/LOGO_BANCA_UNION.png" alt="" height="60">
+                                    <img src="../../public/images/LOGO_BANCA_UNION.png" height="60">
                                 </span>
                             </a>
                         </div>
@@ -32,7 +32,7 @@
                             <!-- Icono de alerta -->
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item user text-start d-flex align-items-center" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="rounded-circle header-profile-user" src="../../assets/a111.jpg" alt="Header Avatar">
+                                <img class="rounded-circle header-profile-user" src="../../public/images/a111.jpg" alt="Header Avatar">
                                 <span class="d-none d-sm-inline-block ms-1"><?php echo $usu_nom; ?></span>
                                 <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
                             </button>

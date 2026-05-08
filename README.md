@@ -1,1 +1,2 @@
 # ejercicio-1
+# command por debug models: Get-Content "C:\xampp\php\logs\php_error_log" -Wait -Tail 20

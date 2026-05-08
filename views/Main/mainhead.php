@@ -17,3 +17,5 @@
 <!-- DataTables CSS -->
 <link href="../../public/libs/datatables/jquery.dataTables.css" rel="stylesheet">
 <link href="../../public/datatables/buttons.dataTables.min.css" rel="stylesheet"/>
+<!-- Font Awesome para iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
