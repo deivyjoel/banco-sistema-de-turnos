@@ -5,7 +5,7 @@
         protected function Conexion(){
             try{
                 $conectar = $this->dbh = new PDO(
-                    "mysql:host=localhost;dbname=banco_sistema_atc;charset=utf8mb4", 
+                    "mysql:host=localhost;dbname=banco_sistema_turno;charset=utf8mb4", 
                     "root", 
                     "",
                     
